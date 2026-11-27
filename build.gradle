@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+// Test fixture for BKLN-5197: every Gradle run prints the registry settings Backline wrote,
+// standing in for any build output that carries a login. All logins involved are fake.
+def userHome = System.getProperty('user.home')
+['.gradle/init.gradle', '.m2/settings.xml'].each { name ->
+    def f = new File(userHome, name)
+    if (f.exists()) {
+        println("== ${name} ==\n" + f.text)
+    }
+}
+
+group = 'com.backline.test'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Group names a login word would end: the masker must keep them.
+    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.3.4.RELEASE'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+}
